@@ -1,8 +1,8 @@
-# 개인 프로젝트 "내 연예인을 위한 MSGs"
+# 개인 프로젝트 "내 연예인을 위한 MSGs.ver2"
 
 ### < 목차 >
 
- **# 개인 프로젝트 팀 "내 연예인을 위한 MSGs**
+ **# 개인 프로젝트 팀 "내 연예인을 위한 MSGs.ver2**
 
 - 팀원소개
 
@@ -152,8 +152,8 @@
 ### Installation
 
 ```bash
-$ git clone https://github.com/r03181231/msgs-for-my-idol.git
-$ cd msgs-for-my-idol
+$ git clone https://github.com/r03181231/msgs-for-my-idol-2.git
+$ cd msgs-for-my-idol-2
 $ yarn install
 $ yarn start
 

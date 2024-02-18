@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Register from "./Register";
-import useInputs from "component/common/useInputs";
+import useInputs from "component/hook/useInputs";
 
 const Login = () => {
   const navigator = useNavigate();
@@ -15,7 +15,7 @@ const Login = () => {
   const userPw = loginValue.password;
   const onSubmitToggle = (e) => {
     e.preventDefault();
-    navigator("/register");
+    navigator("/");
     setLoginToggle(true);
   };
   return (
@@ -54,6 +54,14 @@ const Login = () => {
           >
             로그인
           </button>
+          <RegisterDiv>
+            <p>
+              <span>처음 방문하셨나요?</span>
+            </p>
+            <RegistNavLink to="/register">
+              <span>회원가입</span>
+            </RegistNavLink>
+          </RegisterDiv>
         </Form>
       ) : (
         <Register />
@@ -74,6 +82,8 @@ export const FormWrapper = styled.div`
 export const RegisterDiv = styled.div`
   display: flex;
   flex-direction: row;
+  justify-content: center;
+  /* align-items: center; */
   padding-top: 20px;
   gap: 1rem;
 `;
@@ -113,5 +123,16 @@ export const Form = styled.form`
     &:hover {
       background-color: antiquewhite;
     }
+  }
+`;
+
+export const RegistNavLink = styled(Link)`
+  /* width: 100%; */
+  /* padding: 1rem rem; */
+  /* border-radius: 1rem; */
+
+  font-size: 1rem;
+  &:hover {
+    background-color: antiquewhite;
   }
 `;

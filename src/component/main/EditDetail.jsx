@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
-import { setLetterEdit } from "../../redux/modules/letter";
-import useInputs from "component/common/useInputs";
+import { setLetterEdit } from "../../redux/modules/letterSlice";
+import useInputs from "component/hook/useInputs";
 import Button from "component/common/Button";
 
 const EditDetail = ({ setIsEdit, filterData }) => {

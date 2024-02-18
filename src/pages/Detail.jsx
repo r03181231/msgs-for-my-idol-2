@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { setLetterDelete } from "../redux/modules/letter";
+import { setLetterDelete } from "../redux/modules/letterSlice";
 import EditDetail from "component/main/EditDetail";
 import Button from "component/common/Button";
 

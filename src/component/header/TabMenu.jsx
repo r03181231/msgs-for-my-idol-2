@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { setActiveTab, setTab } from "../../redux/modules/letter";
+import { setActiveTab, setTab } from "../../redux/modules/letterSlice";
 import * as S from "../styles/StyledTabMenu";
 
 const TabMenu = () => {

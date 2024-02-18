@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import useInputs from "component/common/useInputs";
+import useInputs from "component/hook/useInputs";
 import styled from "styled-components";
 
 const Register = () => {

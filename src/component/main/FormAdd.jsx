@@ -1,9 +1,9 @@
 import React, { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setLetterValue } from "../../redux/modules/letter";
+import { setLetterValue } from "../../redux/modules/letterSlice";
 import { v4 as randomId } from "uuid";
 import FormSelect from "./FormSelect";
-import useInputs from "component/common/useInputs";
+import useInputs from "component/hook/useInputs";
 import Button from "component/common/Button";
 
 const FormAdd = () => {

@@ -5,7 +5,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   userId: "",
   userPw: "",
-  isLoggedIn: false,
+  isLoggedIn: true,
 };
 
 const authSlice = createSlice({
@@ -18,12 +18,12 @@ const authSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder
-      .addCase(addNumber.pending, (state) => {})
-      .addCase(addNumber.fulfilled, (state, action) => {
-        // state.entities.push(action.payload);
-      })
-      .addCase(addNumber.rejected, (state) => {});
+    // builder
+    //   .addCase(addNumber.pending, (state) => {})
+    //   .addCase(addNumber.fulfilled, (state, action) => {
+    //     // state.entities.push(action.payload);
+    //   })
+    //   .addCase(addNumber.rejected, (state) => {});
   },
 });
 

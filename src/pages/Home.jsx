@@ -7,7 +7,7 @@ import * as H from "../component/styles/StyledHome.jsx";
 const Home = () => {
   const tabData = useSelector((store) => store.letter.tabData);
   const tab = useSelector((store) => store.letter.tab);
-  console.log(tabData);
+
   return (
     <H.Layout>
       {/* tabNum, writeTo */}

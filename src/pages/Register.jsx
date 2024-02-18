@@ -15,7 +15,7 @@ const Register = () => {
   const userNickname = registValue.registNickname;
   const onRegisterSubmit = (e) => {
     e.preventDefault();
-    navigator("/login");
+    navigator("/");
   };
   return (
     <div>
@@ -65,7 +65,7 @@ const Register = () => {
           </button>
         </Form>
         <LoginDiv>
-          <LoginNavLink to="/login">
+          <LoginNavLink to="/">
             <span>로그인</span>
           </LoginNavLink>
         </LoginDiv>

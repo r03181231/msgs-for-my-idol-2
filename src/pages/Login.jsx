@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import styled from "styled-components";
-import Register from "./Register";
+import { loginApi } from "api/loginApi";
 import useInputs from "component/hook/useInputs";
+import Register from "./Register";
+import styled from "styled-components";
+import { useDispatch } from "react-redux";
 
 const Login = () => {
   const navigator = useNavigate();
+  const dispatch = useDispatch();
   const [loginToggle, setLoginToggle] = useState(false);
   const [loginValue, setLoginValue, onChange, reset] = useInputs({
     userId: "",
@@ -13,9 +16,25 @@ const Login = () => {
   });
   const userId = loginValue.userId;
   const userPw = loginValue.password;
-  const onSubmitToggle = (e) => {
+  const onSubmitToggle = async (e) => {
     e.preventDefault();
-    navigator("/");
+    try {
+      const { data, status } = await loginApi.postLogin({
+        id: userId,
+        password: userPw,
+      });
+      console.log(data);
+      // data : {success :  true};
+      const state = data.success;
+      if (data === undefined || state !== true) return;
+      if (data.success === true) {
+        // dispatch(setLoginUser());
+        navigator("/home");
+      }
+    } catch (error) {
+      return;
+    }
+    navigator("/home");
     setLoginToggle(true);
   };
   return (

@@ -13,7 +13,7 @@ const CardList = () => {
   );
 
   const moveDetailPage = (clickId) => {
-    navigate(`detail/${clickId}`, { replace: true });
+    navigate(`/detail/${clickId}`, { replace: true });
   };
 
   return (

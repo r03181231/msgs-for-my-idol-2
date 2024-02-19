@@ -1,14 +1,21 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { loginApi } from "api/loginApi";
 import useInputs from "component/hook/useInputs";
 import Register from "./Register";
 import styled from "styled-components";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { __setUserLogin } from "../redux/modules/authSlice";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { getLocal, setLocal } from "component/common/localStorage";
 
 const Login = () => {
-  const navigator = useNavigate();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { data, status } = useSelector((store) => store.users.userData);
+  console.log(data);
+  const token = data?.accessToken || "";
+  const { errorStatus, errorMessage } = useSelector((store) => store.users);
   const [loginToggle, setLoginToggle] = useState(false);
   const [loginValue, setLoginValue, onChange, reset] = useInputs({
     userId: "",
@@ -18,27 +25,30 @@ const Login = () => {
   const userPw = loginValue.password;
   const onSubmitToggle = async (e) => {
     e.preventDefault();
-    try {
-      const { data, status } = await loginApi.postLogin({
-        id: userId,
-        password: userPw,
-      });
-      console.log(data);
-      // data : {success :  true};
-      const state = data.success;
-      if (data === undefined || state !== true) return;
-      if (data.success === true) {
-        // dispatch(setLoginUser());
-        navigator("/home");
-      }
-    } catch (error) {
+
+    dispatch(__setUserLogin({ id: userId, password: userPw }));
+    if (errorStatus || !data || data.success !== true) {
+      // toast(`${errorMessage}`);
+      alert(`${errorMessage}`);
+      reset();
+      navigate("/", { replace: true });
       return;
     }
-    navigator("/home");
-    setLoginToggle(true);
+    if (!token) {
+      alert("잘못된 접속입니다. 다시 시도해주세요!");
+      return;
+    }
+    if (data.success === true && token) {
+      setLocal("token", token);
+      alert(`로그인되셨습니다!`);
+      // toast(`로그인되셨습니다!`);
+      navigate("/home", { replace: true });
+    }
   };
+
   return (
     <FormWrapper>
+      {/* <ToastContainer /> */}
       {!loginToggle ? (
         <Form onSubmit={onSubmitToggle}>
           <div>
@@ -83,7 +93,12 @@ const Login = () => {
           </RegisterDiv>
         </Form>
       ) : (
-        <Register />
+        <Register
+          setLoginToggle={setLoginToggle}
+          data={data}
+          errorStatus={errorStatus}
+          errorMessage={errorMessage}
+        />
       )}
     </FormWrapper>
   );

@@ -2,10 +2,12 @@
 import { configureStore } from "@reduxjs/toolkit";
 import users from "../modules/authSlice";
 import letter from "../modules/letterSlice";
+import register from "../modules/registSlice";
 
 const store = configureStore({
   reducer: {
     users,
+    register,
     letter,
   },
 });

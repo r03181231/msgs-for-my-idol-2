@@ -1,5 +1,7 @@
 // userAPI
 
+import axios from "axios";
+
 const registerURL = `${process.env.REACT_APP_API_URL}`;
 
 const instanceRegister = axios.create({
@@ -12,27 +14,33 @@ export const registApi = {
 };
 
 // 요청
-registerApi.interceptors.request.use(
+instanceRegister.interceptors.request.use(
   function (config) {
-    console.log("요청 완료");
+    console.log("요청 완료", config);
+
     return config;
   },
 
   function (error) {
-    console.log("요청이 거절됐습니다.");
+    console.log("요청이 거절됐습니다.", error);
     return Promise.reject(error);
   }
 );
 
 // 응답
-registerApi.interceptors.reponse.use(
+instanceRegister.interceptors.response.use(
   function (response) {
-    console.log("응답 완료");
-    return response.data;
+    console.log("응답 완료", response);
+    const data = response.data;
+    const status = response.status;
+    const statusText = response.statusText;
+    const datas = { data, status, statusText };
+    return datas;
   },
 
   function (error) {
-    console.log("요청이 거절됐습니다.");
+    console.log("요청이 거절됐습니다.", error);
+
     return Promise.reject(error);
   }
 );

@@ -1,19 +1,26 @@
 import React from "react";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
+import { clearLocal, removeLocal } from "component/common/localStorage";
 import styled from "styled-components";
 
 const Layout = () => {
+  const navigate = useNavigate();
+  const onLogout = () => {
+    clearLocal("token");
+    alert("로그아웃 되셨습니다!");
+    navigate("/");
+  };
   return (
     <div>
-      <header>
+      <Header>
         <Link to="/home">HOME</Link>
         <ProfileLogoutNav>
           <Link>
             <p>내&nbsp;프로필</p>
           </Link>
-          <LogoutBtn>로그아웃</LogoutBtn>
+          <LogoutBtn onClick={onLogout}>로그아웃</LogoutBtn>
         </ProfileLogoutNav>
-      </header>
+      </Header>
       <Outlet />
     </div>
   );
@@ -21,6 +28,20 @@ const Layout = () => {
 
 export default Layout;
 
-export const ProfileLogoutNav = styled.nav``;
+export const Header = styled.header`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 20px;
+`;
+
+export const ProfileLogoutNav = styled.nav`
+  display: flex;
+  align-items: center;
+
+  gap: 20px;
+`;
 
 export const LogoutBtn = styled.button``;

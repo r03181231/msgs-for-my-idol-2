@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { __setUserRegist } from "../redux/modules/registSlice";
@@ -8,10 +8,13 @@ import styled from "styled-components";
 const Register = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { data } = useSelector((store) => store.register.registData);
+  const { data, status } = useSelector((store) => store.register.registData);
   const { registErrorStatus, registErrorMessage } = useSelector(
     (store) => store.register
   );
+  const isSuccess = useSelector((store) => store.users.isSuccess);
+  const successMessage = data ? data.message : "";
+  console.log(data);
   console.log(registErrorStatus, registErrorMessage);
   const [registValue, setRegistValue, onChange, reset] = useInputs({
     registId: "",
@@ -22,21 +25,27 @@ const Register = () => {
   const userPw = registValue.registPw;
   const userNickname = registValue.registNickname;
 
+  useEffect(() => {
+    if (isSuccess === true) {
+      alert(`${successMessage}`);
+      navigate("/", { replace: true });
+    }
+  }, [successMessage]);
+
+  useEffect(() => {
+    if (registErrorMessage.length > 0) {
+      alert(registErrorMessage);
+      reset();
+      navigate("/register", { replace: true });
+      return;
+    }
+  }, [registErrorMessage]);
+
   const onRegisterSubmit = async (e) => {
     e.preventDefault();
     dispatch(
       __setUserRegist({ id: userId, password: userPw, nickname: userNickname })
     );
-    if (registErrorStatus || !data || data.success !== true) {
-      alert(`${registErrorMessage}`);
-      reset();
-      navigate("/register", { replace: true });
-      return;
-    }
-    if (data.success === true) {
-      alert(`${data.message}`);
-      navigate("/", { replace: true });
-    }
   };
   return (
     <div>

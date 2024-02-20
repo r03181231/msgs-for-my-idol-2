@@ -1,17 +1,28 @@
-// userAPI
+import axios from "axios";
+import { gettingLocal } from "component/common/localStorage";
 
-const userURL = `${process.env.REACT_APP_API_URL}`;
+// userAPI
+const token = gettingLocal("token");
+const userURL = process.env.REACT_APP_API_URL;
 
 const instanceUser = axios.create({
-  baseURL: registerURL,
+  baseURL: userURL,
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${token}`,
+  },
 });
 
-export const userApi = {};
+export const userApi = {
+  getUserInfo: () => instanceUser.get("/user"),
+};
 
 // 요청
-loginApi.interceptors.request.use(
+instanceUser.interceptors.request.use(
   function (config) {
-    console.log("요청 완료");
+    console.log("요청 완료", config);
+    const token = gettingLocal("token");
+    config.headers.Authorization = `Bearer ${token}`;
     return config;
   },
 
@@ -22,9 +33,9 @@ loginApi.interceptors.request.use(
 );
 
 // 응답
-loginApi.interceptors.reponse.use(
+instanceUser.interceptors.response.use(
   function (response) {
-    console.log("응답 완료");
+    console.log("응답 완료", response);
     return response.data;
   },
 

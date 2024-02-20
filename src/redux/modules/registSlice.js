@@ -10,7 +10,7 @@ const initialState = {
   isRegistError: false,
 
   registErrorStatus: 0,
-  registErrorMessage: "",
+  registErrorMessage: null,
 };
 
 export const __setUserRegist = createAsyncThunk(
@@ -20,9 +20,7 @@ export const __setUserRegist = createAsyncThunk(
       const response = await registApi.postRegist(userRegistIdPw);
       return response;
     } catch (error) {
-      const errorStatus = error?.response?.status;
-      const errorMessage = error?.response?.data?.message;
-      return thunkAPI.rejectWithValue({ errorStatus, errorMessage });
+      return thunkAPI.rejectWithValue(error);
     }
   }
 );
@@ -43,11 +41,14 @@ const registSlice = createSlice({
         state.registData = { ...aciton.payload };
       })
       .addCase(__setUserRegist.rejected, (state, action) => {
-        console.log(action.payload);
+        const errorStatus = action.payload.response.status;
+        const errorMessage = action.payload.response.data.message;
         state.isLoading = false;
         state.isError = true;
-        state.registErrorStatus = action.payload.errorStatus;
-        state.registErrorMessage = action.payload.errorMessage;
+
+        state.error = action.payload;
+        state.registErrorStatus = errorStatus;
+        state.registErrorMessage = errorMessage;
       });
   },
 });

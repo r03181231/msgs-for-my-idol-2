@@ -2,7 +2,7 @@
 
 import axios from "axios";
 
-const loginURL = `${process.env.REACT_APP_API_URL}`;
+const loginURL = process.env.REACT_APP_API_URL;
 
 const instanceLogin = axios.create({
   baseURL: loginURL,
@@ -39,8 +39,13 @@ instanceLogin.interceptors.response.use(
 
   function (error) {
     console.log("응답 거절");
-    // error.response = {data.message, status : 401, statusText : "Unauthorized"}
-
     return Promise.reject(error);
   }
 );
+
+// // error.response = {data.message, status : 401, statusText : "Unauthorized"}
+// const errorData = error.response;
+// const errorStatus = error.response.status;
+// const errorMessage = error.response.data.message;
+
+// console.log(errorData, errorStatus, errorMessage);

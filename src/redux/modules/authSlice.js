@@ -2,15 +2,36 @@
 
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { loginApi } from "api/loginApi";
+import { userApi } from "api/userApi";
 
 const initialState = {
   userData: {},
+  userInfo: {
+    id: "",
+    nickname: "",
+    avatar: "",
+    success: false,
+  },
+  error: null,
   isSuccess: false,
   isLoading: false,
   isError: false,
   errorStatus: 0,
   errorMessage: "",
 };
+
+export const __getUserInfo = createAsyncThunk(
+  "auth/getUserInfo",
+  async (_, thunkAPI) => {
+    try {
+      const response = await userApi.getUserInfo();
+      console.log(response);
+      return response;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
 
 export const __setUserLogin = createAsyncThunk(
   "auth/setUserLogin",
@@ -19,9 +40,7 @@ export const __setUserLogin = createAsyncThunk(
       const response = await loginApi.postLogin(userLoginIdPw);
       return response;
     } catch (error) {
-      const errorStatus = error?.response?.status;
-      const errorMessage = error?.response?.data?.message;
-      return thunkAPI.rejectWithValue({ errorStatus, errorMessage });
+      return thunkAPI.rejectWithValue(error);
     }
   }
 );
@@ -42,10 +61,37 @@ const authSlice = createSlice({
         state.userData = { ...action.payload };
       })
       .addCase(__setUserLogin.rejected, (state, action) => {
+        console.log(action.payload);
+        const errorStatus = action.payload.response.status;
+        const errorMessage = action.payload.response.data.message;
         state.isLoading = false;
         state.isError = true;
-        state.errorStatus = action.payload.errorStatus;
-        state.errorMessage = action.payload.errorMessage;
+
+        state.error = action.payload;
+        state.errorStatus = errorStatus;
+        state.errorMessage = errorMessage;
+      });
+    //userInfo
+    builder
+      .addCase(__getUserInfo.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(__getUserInfo.fulfilled, (state, action) => {
+        console.log(action.payload);
+        state.isLoading = true;
+        state.isError = false;
+        state.isSuccess = true;
+        state.userInfo = action.payload;
+      })
+      .addCase(__getUserInfo.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        const errorStatus = action.payload.response.status;
+        const errorMessage = action.payload.response.data.message;
+
+        state.error = action.payload;
+        state.errorStatus = errorStatus;
+        state.errorMessage = errorMessage;
       });
   },
 });
@@ -53,3 +99,6 @@ const authSlice = createSlice({
 export const { setUserLogin, setUserRegist } = authSlice.actions;
 
 export default authSlice.reducer;
+
+// const errorStatus = action.payload.errorStatus;
+// const errorMessage = action.payload.errorMessage;

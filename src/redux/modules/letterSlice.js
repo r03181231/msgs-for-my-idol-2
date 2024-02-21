@@ -1,7 +1,18 @@
-import { createSlice } from "@reduxjs/toolkit";
-import dummyData from "../../shared/fakeData";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { letterApi } from "api/letterApi";
 
 const initialState = {
+  letterUser: {},
+  setletterErrorStatus: null,
+  setletterErrorMessage: null,
+
+  getLetterError: null,
+  getLetterErrorStatus: null,
+  getletterErrorMessage: null,
+  isLoading: false,
+  isSuccess: false,
+  isError: false,
+  error: null,
   tabData: [
     {
       tabNum: 1,
@@ -30,11 +41,33 @@ const initialState = {
     tabNum: 1,
     writedTo: "정승환",
   },
-  letterValue: dummyData,
+  letterValue: [],
+  lettersDB: [],
 };
 
 //원래라면
 // const [number, setNumber] = useState(0); 지만 위처럼 바꾼거야.
+export const __getletterCards = createAsyncThunk(
+  "letter/getLetters",
+  async (_, thunkAPI) => {
+    const { data } = await letterApi.getLetters();
+    return data;
+  }
+);
+
+export const __setletterCard = createAsyncThunk(
+  "letter/LetterCard",
+  async (addValue, thunkAPI) => {
+    try {
+      const response = await letterApi.postLetters(addValue);
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      return error;
+      // return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
 
 // input : state, action
 const letterSlice = createSlice({
@@ -63,7 +96,52 @@ const letterSlice = createSlice({
       state.letterValue = letterData;
     },
   },
-  extraReducer: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(__setletterCard.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(__setletterCard.fulfilled, (state, action) => {
+        console.log(action.payload);
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+        // state.letterValue = action.payload;
+      })
+      .addCase(__setletterCard.rejected, (state, action) => {
+        const errorStatus = action.payload.response.status;
+        const errorMessage = action.payload.response.data.message;
+        state.isLoading = false;
+        state.isError = true;
+
+        state.error = action.payload;
+        state.setletterErrorStatus = errorStatus;
+        state.setletterErrorMessage = errorMessage;
+      });
+    //getletterCard
+    builder
+      .addCase(__getletterCards.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(__getletterCards.fulfilled, (state, action) => {
+        console.log(action.payload);
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+        state.lettersDB = action.payload;
+      })
+      .addCase(__getletterCards.rejected, (state, action) => {
+        console.log(action.payload);
+        const errorStatus = action.payload.response.status;
+        const errorMessage = action.payload.response.data.message;
+        state.isLoading = false;
+        state.isError = true;
+
+        state.error = action.payload;
+        state.setletterErrorStatus = errorStatus;
+        state.setletterErrorMessage = errorMessage;
+      });
+  },
 });
 
 export const {
@@ -74,3 +152,25 @@ export const {
   setLetterDelete,
 } = letterSlice.actions;
 export default letterSlice.reducer;
+
+//  .addCase(__getletterCard.pending, (state) => {
+//         state.isLoading = true;
+//       })
+//       .addCase(__getletterCard.fulfilled, (state, action) => {
+//         console.log(action.payload);
+//         state.isLoading = false;
+//         state.isError = false;
+//         state.isSuccess = true;
+//         state.lettersDB = action.payload;
+//       })
+//       .addCase(__getletterCard.rejected, (state, action) => {
+//         const errorStatus = action.payload.response.status;
+//         const errorMessage = action.payload.response.data.message;
+//         console.log(action.payload);
+//         state.isLoading = false;
+//         state.isError = true;
+
+//         state.getLetterError = action.payload;
+//         state.getLetterErrorStatus = errorStatus;
+//         state.getletterErrorMessage = errorMessage;
+//       });

@@ -11,6 +11,7 @@ const FormSelect = ({ tabData, addValue, setAddValue }) => {
       name="writedTo"
       value={writedTo}
       key={writedTo}
+      // defaultValue={writedTo}
       onChange={optionOrder}
     >
       {tabData.map((optionWriteTo) => {

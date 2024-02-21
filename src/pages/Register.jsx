@@ -9,13 +9,8 @@ const Register = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { data, status } = useSelector((store) => store.register.registData);
-  const { registErrorStatus, registErrorMessage } = useSelector(
-    (store) => store.register
-  );
-  const isSuccess = useSelector((store) => store.users.isSuccess);
-  const successMessage = data ? data.message : "";
-  console.log(data);
-  console.log(registErrorStatus, registErrorMessage);
+  const isSuccess = useSelector((store) => store.register.isSuccess);
+  const { errorStatus, errorMessage } = useSelector((store) => store.register);
   const [registValue, setRegistValue, onChange, reset] = useInputs({
     registId: "",
     registPw: "",
@@ -25,32 +20,26 @@ const Register = () => {
   const userPw = registValue.registPw;
   const userNickname = registValue.registNickname;
 
-  useEffect(() => {
-    if (isSuccess === true) {
-      alert(`${successMessage}`);
-      navigate("/", { replace: true });
-    }
-  }, [successMessage]);
-
-  useEffect(() => {
-    if (registErrorMessage.length > 0) {
-      alert(registErrorMessage);
-      reset();
-      navigate("/register", { replace: true });
-      return;
-    }
-  }, [registErrorMessage]);
-
   const onRegisterSubmit = async (e) => {
     e.preventDefault();
     dispatch(
       __setUserRegist({ id: userId, password: userPw, nickname: userNickname })
     );
+    if (status === 201 && isSuccess === true) {
+      alert("회원가입이 완료되었습니다");
+      navigate("/", { replace: true });
+    }
+    if (errorStatus) {
+      alert(errorMessage);
+      reset();
+      navigate("/register", { replace: true });
+      return;
+    }
   };
   return (
     <div>
       <FormWrapper>
-        <Form onSubmit={onRegisterSubmit}>
+        <Form>
           <div>
             <label htmlFor="userId"> 아이디 </label>
             <input
@@ -90,6 +79,7 @@ const Register = () => {
                 ? true
                 : false
             }
+            onClick={onRegisterSubmit}
           >
             회원가입
           </button>
@@ -170,3 +160,16 @@ export const LoginNavLink = styled(Link)`
     background-color: antiquewhite;
   }
 `;
+
+// useEffect(() => {
+//   if (isSuccess === true) {
+//     alert(`${successMessage}`);
+//     navigate("/", { replace: true });
+//   }
+// }, [successMessage]);
+
+// useEffect(() => {
+//   if (registErrorMessage.length > 0) {
+//     alert(registErrorMessage);
+//   }
+// }, [registErrorMessage]);

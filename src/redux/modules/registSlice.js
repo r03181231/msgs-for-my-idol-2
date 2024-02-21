@@ -5,12 +5,12 @@ import { registApi } from "api/registerApi";
 
 const initialState = {
   registData: {},
-  isRegistSuccess: false,
-  isRegistLoading: false,
-  isRegistError: false,
-
-  registErrorStatus: 0,
-  registErrorMessage: null,
+  isSuccess: false,
+  isLoading: false,
+  isError: false,
+  error: null,
+  errorStatus: 0,
+  errorMessage: null,
 };
 
 export const __setUserRegist = createAsyncThunk(
@@ -35,10 +35,10 @@ const registSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(__setUserRegist.fulfilled, (state, aciton) => {
-        state.isRegistLoading = false;
-        state.isRegistError = false;
-        state.isRegistSuccess = true;
-        state.registData = { ...aciton.payload };
+        state.isLoading = false;
+        state.error = false;
+        state.isSuccess = aciton.payload.data.success;
+        state.registData = aciton.payload;
       })
       .addCase(__setUserRegist.rejected, (state, action) => {
         const errorStatus = action.payload.response.status;
@@ -47,12 +47,12 @@ const registSlice = createSlice({
         state.isError = true;
 
         state.error = action.payload;
-        state.registErrorStatus = errorStatus;
-        state.registErrorMessage = errorMessage;
+        state.errorStatus = errorStatus;
+        state.errorMessage = errorMessage;
       });
   },
 });
 
-export const { setUserRegist } = registSlice.actions;
+export const {} = registSlice.actions;
 
 export default registSlice.reducer;

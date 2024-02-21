@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { __getUserInfo, __setUserLogin } from "../redux/modules/authSlice";
-import { gettingLocal, settingLocal } from "component/common/localStorage";
+import { settingLocal } from "component/common/localStorage";
 import useInputs from "component/hook/useInputs";
 import Register from "./Register";
 import * as L from "component/styles/LoginStyle";
@@ -12,14 +12,12 @@ const Login = () => {
   const dispatch = useDispatch();
   const { data, status } = useSelector((store) => store.users.userData);
   const userInfo = {
-    id: data.userId,
-    nickname: data.nickname,
-    avatar: data.avatar,
-    success: data.success,
+    id: data?.userId,
+    nickname: data?.nickname,
+    avatar: data?.avatar,
+    success: data?.success,
   };
-  console.log(data);
   const { errorStatus, errorMessage } = useSelector((store) => store.users);
-  // const { error } = useSelector((store) => store.users);
   const isLoading = useSelector((store) => store.users.isLoading);
   const [loginToggle, setLoginToggle] = useState(false);
   const [loginValue, setLoginValue, onChange, reset] = useInputs({
@@ -34,18 +32,15 @@ const Login = () => {
 
   const onSubmitToggle = (e) => {
     e.preventDefault();
-    console.log(data);
     dispatch(__setUserLogin({ id: userId, password: userPw }));
 
     if (data) {
       settingLocal("token", token);
-      if (gettingLocal("token")) {
-        dispatch(__getUserInfo());
+      // dispatch(__getUserInfo());
+      settingLocal("user", userInfo);
 
-        settingLocal("user", userInfo);
-        alert("로그인 되셨습니다!");
-        navigate("/home", { replace: true });
-      }
+      alert("로그인 되셨습니다!");
+      navigate("/home", { replace: true });
     }
 
     if (errorStatus) {

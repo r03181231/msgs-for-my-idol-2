@@ -1,38 +1,47 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setLetterValue } from "../../redux/modules/letterSlice";
+import {
+  __setletterCard,
+  setLetterValue,
+} from "../../redux/modules/letterSlice";
 import { v4 as randomId } from "uuid";
 import FormSelect from "./FormSelect";
-import useInputs from "component/hook/useInputs";
 import Button from "component/common/Button";
+import { gettingLocal } from "component/common/localStorage";
 
 const FormAdd = () => {
   const normalAvataUrl =
     "https://lh7-us.googleusercontent.com/MyS-PhOT-AvaQtCYXsr0oQPxakqvdc-s-QFcNZmCwd19fbYditWA_IwxeepE78dANxt04nEws75hrFfmqNuhJLx2EQxy_RSe8x6M7LcHGVjhzEkSpREFDhWljam2mdGNxes5xqoxP1sZpYijy3nTTXU";
   const dispatch = useDispatch();
-  const { nickname } = useSelector((store) => store.users.userInfo);
+  const { nickname, id } = gettingLocal("user");
   const tabData = useSelector((store) => store.letter.tabData);
   const tab = useSelector((store) => store.letter.tab);
   let time = new Date().toISOString();
   const blankPattern = /^\s+|\s+$/g;
   const contentRef = useRef(null);
-  const [addValue, setAddValue, onChange, reset] = useInputs({
+  const init = {
     id: randomId(),
     nickname: nickname,
     avatar: normalAvataUrl,
     content: "",
     writedTo: tab.writedTo,
     createdAt: time,
-  });
+    userId: id,
+  };
+  const [addValue, setAddValue] = useState(init);
   const { content, writedTo } = addValue;
   // input 유효성
   const contentBlank = content.replace(blankPattern, "");
   // input 포커스
+  const onChangeHandle = (e) => {
+    const { name, value } = e.target;
+    setAddValue({ ...addValue, [name]: value });
+  };
   useEffect(() => {
     contentRef.current.focus();
   }, []);
   // 추가
-  const onAddSubmit = (e) => {
+  const onAddSubmit = async (e) => {
     e.preventDefault();
 
     if (contentBlank === "") {
@@ -45,9 +54,9 @@ const FormAdd = () => {
       contentRef.current.focus();
       return;
     }
-
+    dispatch(__setletterCard(addValue));
     dispatch(setLetterValue(addValue));
-    reset();
+    setAddValue(init);
     contentRef.current.focus();
   };
 
@@ -70,12 +79,12 @@ const FormAdd = () => {
             ref={contentRef}
             maxLength={100}
             placeholder="최대 100글자까지만 작성할 수 있습니다."
-            onChange={onChange}
+            onChange={onChangeHandle}
           />
         </div>
         <FormSelect
           tabData={tabData}
-          onChange={onChange}
+          onChange={onChangeHandle}
           addValue={addValue}
           setAddValue={setAddValue}
         />

@@ -16,13 +16,12 @@ export const registApi = {
 // 요청
 instanceRegister.interceptors.request.use(
   function (config) {
-    console.log("요청 완료", config);
-
+    console.log("요청 완료");
     return config;
   },
 
   function (error) {
-    console.log("요청이 거절됐습니다.", error);
+    console.log("요청이 거절됐습니다.");
     return Promise.reject(error);
   }
 );
@@ -30,7 +29,7 @@ instanceRegister.interceptors.request.use(
 // 응답
 instanceRegister.interceptors.response.use(
   function (response) {
-    console.log("응답 완료", response);
+    console.log("응답 완료");
     const data = response.data;
     const status = response.status;
     const statusText = response.statusText;
@@ -39,7 +38,7 @@ instanceRegister.interceptors.response.use(
   },
 
   function (error) {
-    console.log("요청이 거절됐습니다.", error);
+    console.log("요청이 거절됐습니다.");
 
     return Promise.reject(error);
   }

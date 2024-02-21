@@ -1,21 +1,26 @@
 import React from "react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
-import { clearLocal, removeLocal } from "component/common/localStorage";
+import { clearLocal, gettingLocal } from "component/common/localStorage";
 import styled from "styled-components";
 
 const Layout = () => {
   const navigate = useNavigate();
+  const token = gettingLocal("token");
+  if (!token) {
+    alert("다시 로그인 해주세요!");
+    navigate("/", {replace : true});
+  }
   const onLogout = () => {
     clearLocal("token");
     alert("로그아웃 되셨습니다!");
-    navigate("/");
+    navigate("/", { replace: true });
   };
   return (
     <div>
       <Header>
         <Link to="/home">HOME</Link>
         <ProfileLogoutNav>
-          <Link>
+          <Link to="/myprofile">
             <p>내&nbsp;프로필</p>
           </Link>
           <LogoutBtn onClick={onLogout}>로그아웃</LogoutBtn>

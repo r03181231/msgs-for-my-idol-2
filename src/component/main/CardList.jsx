@@ -1,16 +1,18 @@
 // import { useNavigate } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import * as S from "../styles/StyleCardList";
 
 const CardList = () => {
   const navigate = useNavigate();
-  const letterValue = useSelector((store) => store.letter.letterValue);
+  const dispatch = useDispatch();
+  const lettersDB = useSelector((store) => store.letter.lettersDB);
+
   const tab = useSelector((store) => store.letter.tab);
   const { writedTo } = tab; //state에 따라
-  const filterLetter = letterValue.filter(
-    (letterItem) => letterItem.writedTo === writedTo
-  );
+  const filterLetter = lettersDB
+    ? lettersDB.filter((letterItem) => letterItem.writedTo === writedTo)
+    : [];
 
   const moveDetailPage = (clickId) => {
     navigate(`/detail/${clickId}`, { replace: true });

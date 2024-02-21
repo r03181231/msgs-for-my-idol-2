@@ -12,7 +12,7 @@ const initialState = {
     avatar: "",
     success: false,
   },
-  error: null,
+  error: {},
   isSuccess: false,
   isLoading: false,
   isError: false,
@@ -48,17 +48,17 @@ export const __setUserLogin = createAsyncThunk(
 const authSlice = createSlice({
   name: "users",
   initialState,
-  reducer: {},
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(__setUserLogin.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(__setUserLogin.fulfilled, (state, action) => {
+        state.isSuccess = true;
         state.isLoading = false;
         state.isError = false;
-        state.isSuccess = true;
-        state.userData = { ...action.payload };
+        state.userData = action.payload;
       })
       .addCase(__setUserLogin.rejected, (state, action) => {
         console.log(action.payload);
@@ -78,7 +78,7 @@ const authSlice = createSlice({
       })
       .addCase(__getUserInfo.fulfilled, (state, action) => {
         console.log(action.payload);
-        state.isLoading = true;
+        state.isLoading = false;
         state.isError = false;
         state.isSuccess = true;
         state.userInfo = action.payload;
@@ -96,7 +96,7 @@ const authSlice = createSlice({
   },
 });
 
-export const { setUserLogin, setUserRegist } = authSlice.actions;
+export const {} = authSlice.actions;
 
 export default authSlice.reducer;
 

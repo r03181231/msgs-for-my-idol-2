@@ -1,22 +1,25 @@
+// letterApi.js
 // userAPI
 
 import axios from "axios";
 
-const loginURL = process.env.REACT_APP_API_URL;
+const letterURL = "http://localhost:5000";
 
-const instanceLogin = axios.create({
-  baseURL: loginURL,
+const instanceLetter = axios.create({
+  baseURL: letterURL,
 });
 
 // 사용 예시 : loginApi.postLogin(payload)
-export const loginApi = {
-  postLogin: (payload) => instanceLogin.post("/login?expiresIn=10m", payload),
+export const letterApi = {
+  getLetters: () => instanceLetter.get("/letters"),
+  postLetters: (payload) => instanceLetter.post("/letters", payload),
   // instanceLogin.post("/login", payload, { withCredentials: true }),
 };
 
 // 요청
-instanceLogin.interceptors.request.use(
+instanceLetter.interceptors.request.use(
   function (config) {
+    console.log("요청 성공", config);
     return config;
   },
 
@@ -27,7 +30,7 @@ instanceLogin.interceptors.request.use(
 );
 
 // 응답
-instanceLogin.interceptors.response.use(
+instanceLetter.interceptors.response.use(
   function (response) {
     console.log("응답 완료");
     const data = response.data;

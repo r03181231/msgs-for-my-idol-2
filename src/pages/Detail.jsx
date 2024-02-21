@@ -16,7 +16,7 @@ const Detail = () => {
   console.log(letterValue);
 
   const moveHomeNavigator = () => {
-    navigate("/", { replace: true });
+    navigate("/home", { replace: true });
   };
 
   const onEdit = () => {
@@ -44,7 +44,7 @@ const Detail = () => {
             filterData;
           return (
             <div key={id}>
-              <Button name={"홈버튼"} onClick={moveHomeNavigator} />
+              <Button name={"이전으로"} onClick={moveHomeNavigator} />
 
               <div>
                 <img src={avatar} alt="dummyimage" />

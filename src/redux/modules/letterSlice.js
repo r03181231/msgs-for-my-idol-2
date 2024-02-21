@@ -185,25 +185,3 @@ export const {
   setLetterDelete,
 } = letterSlice.actions;
 export default letterSlice.reducer;
-
-//  .addCase(__getletterCard.pending, (state) => {
-//         state.isLoading = true;
-//       })
-//       .addCase(__getletterCard.fulfilled, (state, action) => {
-//         console.log(action.payload);
-//         state.isLoading = false;
-//         state.isError = false;
-//         state.isSuccess = true;
-//         state.lettersDB = action.payload;
-//       })
-//       .addCase(__getletterCard.rejected, (state, action) => {
-//         const errorStatus = action.payload.response.status;
-//         const errorMessage = action.payload.response.data.message;
-//         console.log(action.payload);
-//         state.isLoading = false;
-//         state.isError = true;
-
-//         state.getLetterError = action.payload;
-//         state.getLetterErrorStatus = errorStatus;
-//         state.getletterErrorMessage = errorMessage;
-//       });

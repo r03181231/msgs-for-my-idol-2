@@ -13,7 +13,7 @@ const FormAdd = () => {
   const normalAvataUrl =
     "https://lh7-us.googleusercontent.com/MyS-PhOT-AvaQtCYXsr0oQPxakqvdc-s-QFcNZmCwd19fbYditWA_IwxeepE78dANxt04nEws75hrFfmqNuhJLx2EQxy_RSe8x6M7LcHGVjhzEkSpREFDhWljam2mdGNxes5xqoxP1sZpYijy3nTTXU";
   const dispatch = useDispatch();
-  const { nickname, id } = gettingLocal("user");
+  const { nickname, id } = gettingLocal("user") || {};
   const tabData = useSelector((store) => store.letter.tabData);
   const tab = useSelector((store) => store.letter.tab);
   let time = new Date().toISOString();

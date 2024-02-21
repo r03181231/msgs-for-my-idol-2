@@ -1,20 +1,36 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
-import { clearLocal, gettingLocal } from "component/common/localStorage";
+import {
+  clearLocal,
+  gettingLocal,
+  settingLocal,
+} from "component/common/localStorage";
 import styled from "styled-components";
+import { useSelector } from "react-redux";
 
 const Layout = () => {
   const navigate = useNavigate();
+  const { data, status } = useSelector((store) => store.users.userData);
   const token = gettingLocal("token");
+
+  const userInfo = {
+    id: data?.userId,
+    nickname: data?.nickname,
+    avatar: data?.avatar,
+    success: data?.success,
+  };
   if (!token) {
     alert("다시 로그인 해주세요!");
-    navigate("/", {replace : true});
+    navigate("/", { replace: true });
   }
   const onLogout = () => {
     clearLocal("token");
     alert("로그아웃 되셨습니다!");
     navigate("/", { replace: true });
   };
+  useEffect(() => {
+    settingLocal("user", userInfo);
+  }, []);
   return (
     <div>
       <Header>

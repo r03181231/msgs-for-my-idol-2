@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { __getUserInfo, __setUserLogin } from "../redux/modules/authSlice";
-import { settingLocal } from "component/common/localStorage";
+import { clearLocal, settingLocal } from "component/common/localStorage";
 import useInputs from "component/hook/useInputs";
 import Register from "./Register";
 import * as L from "component/styles/LoginStyle";
@@ -11,12 +11,6 @@ const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { data, status } = useSelector((store) => store.users.userData);
-  const userInfo = {
-    id: data?.userId,
-    nickname: data?.nickname,
-    avatar: data?.avatar,
-    success: data?.success,
-  };
   const { errorStatus, errorMessage } = useSelector((store) => store.users);
   const isLoading = useSelector((store) => store.users.isLoading);
   const [loginToggle, setLoginToggle] = useState(false);
@@ -36,8 +30,6 @@ const Login = () => {
 
     if (data) {
       settingLocal("token", token);
-      // dispatch(__getUserInfo());
-      settingLocal("user", userInfo);
 
       alert("로그인 되셨습니다!");
       navigate("/home", { replace: true });
@@ -45,6 +37,7 @@ const Login = () => {
 
     if (errorStatus) {
       alert(errorMessage);
+      clearLocal();
       reset();
       navigate("/", { replace: true });
       return;

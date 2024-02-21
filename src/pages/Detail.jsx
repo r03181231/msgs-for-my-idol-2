@@ -5,15 +5,21 @@ import { useDispatch, useSelector } from "react-redux";
 import { setLetterDelete } from "../redux/modules/letterSlice";
 import EditDetail from "component/main/EditDetail";
 import Button from "component/common/Button";
+import { gettingLocal } from "component/common/localStorage";
 
 const Detail = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const userId = gettingLocal("user");
   const letterValue = useSelector((store) => store.letter.letterValue);
   const [isEdit, setIsEdit] = useState(false); // 수정 상태 , 저장
   const thisLetter = letterValue.filter((data) => data.id === id);
-  console.log(letterValue);
+  const filterUserId = thisLetter.map((item) => item.userId);
+  const currUserId = userId.id;
+  const canUser = filterUserId[0] === currUserId;
+  console.log(filterUserId[0]);
+  console.log(canUser);
 
   const moveHomeNavigator = () => {
     navigate("/home", { replace: true });
@@ -67,8 +73,12 @@ const Detail = () => {
                 {!isEdit ? (
                   <div>
                     <p>{content}</p>
-                    <Button name={"수정"} onClick={onEdit} />
-                    <Button name={"삭제"} onClick={onDelete} />
+                    {canUser && !isEdit ? (
+                      <>
+                        <Button name={"수정"} onClick={onEdit} />
+                        <Button name={"삭제"} onClick={onDelete} />
+                      </>
+                    ) : null}
                   </div>
                 ) : (
                   <EditDetail

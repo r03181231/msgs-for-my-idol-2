@@ -1,10 +1,15 @@
 import { useDispatch, useSelector } from "react-redux";
-import { setLetterEdit } from "../../redux/modules/letterSlice";
+import {
+  __patchLetterCard,
+  setLetterEdit,
+} from "../../redux/modules/letterSlice";
 import useInputs from "component/hook/useInputs";
 import Button from "component/common/Button";
+import { gettingLocal } from "component/common/localStorage";
 
 const EditDetail = ({ setIsEdit, filterData }) => {
   const dispatch = useDispatch();
+
   const letterValue = useSelector((store) => store.letter.letterValue);
   const { id, avatar, nickname, writedTo, content, createdAt } = filterData;
 
@@ -44,6 +49,7 @@ const EditDetail = ({ setIsEdit, filterData }) => {
     });
 
     dispatch(setLetterEdit(editData));
+    dispatch(__patchLetterCard(editData));
     alert("내용을 수정하셨습니다.");
     setIsEdit(false);
   };
@@ -61,6 +67,7 @@ const EditDetail = ({ setIsEdit, filterData }) => {
         value={editValueContent}
         onChange={onChange}
       ></textarea>
+
       <Button name={"취소"} onClick={onEditCancel} />
       <Button name={"수정완료"} onClick={onEditSave} />
     </div>

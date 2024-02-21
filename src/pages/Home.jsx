@@ -1,21 +1,23 @@
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { gettingLocal } from "component/common/localStorage.js";
-import { useNavigate } from "react-router-dom";
+import { __getletterCards } from "../redux/modules/letterSlice.js";
 import { __getUserInfo } from "../redux/modules/authSlice.js";
 import HeadContents from "component/header/HeadContents.jsx";
 import CardList from "component/main/CardList.jsx";
 import FormAdd from "component/main/FormAdd.jsx";
 import * as H from "../component/styles/StyledHome.jsx";
-import { __getletterCards } from "../redux/modules/letterSlice.js";
-import { useEffect } from "react";
 
 const Home = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const error = useSelector((store) => store.letter.error);
+  const { error, errorStatus, errorMessage } = useSelector(
+    (store) => store.users
+  );
   const token = gettingLocal("token");
 
-  if (error || !token) {
+  if (!token) {
     alert("로그인을 다시 해주세요!");
     navigate("/", { replace: true });
   }

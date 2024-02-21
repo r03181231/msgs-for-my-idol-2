@@ -11,9 +11,9 @@ const instanceLetter = axios.create({
 
 // 사용 예시 : loginApi.postLogin(payload)
 export const letterApi = {
-  getLetters: () => instanceLetter.get("/letters"),
+  getLetters: () => instanceLetter.get("/letters?_sort=createdAt,+views"),
   postLetters: (payload) => instanceLetter.post("/letters", payload),
-  // instanceLogin.post("/login", payload, { withCredentials: true }),
+  patchLetters: (payload) => instanceLetter.patch("/letters", payload),
 };
 
 // 요청

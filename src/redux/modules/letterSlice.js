@@ -2,7 +2,6 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { letterApi } from "api/letterApi";
 
 const initialState = {
-  letterUser: {},
   setletterErrorStatus: null,
   setletterErrorMessage: null,
 
@@ -42,16 +41,20 @@ const initialState = {
     writedTo: "정승환",
   },
   letterValue: [],
-  lettersDB: [],
 };
 
 //원래라면
 // const [number, setNumber] = useState(0); 지만 위처럼 바꾼거야.
 export const __getletterCards = createAsyncThunk(
   "letter/getLetters",
+
   async (_, thunkAPI) => {
-    const { data } = await letterApi.getLetters();
-    return data;
+    try {
+      const { data } = await letterApi.getLetters();
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
   }
 );
 
@@ -63,8 +66,19 @@ export const __setletterCard = createAsyncThunk(
       return response.data;
     } catch (error) {
       console.log(error);
-      return error;
-      // return thunkAPI.rejectWithValue(error);
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
+export const __patchLetterCard = createAsyncThunk(
+  "letter/patchLetterCard",
+  async (editData, thunkAPI) => {
+    try {
+      const { data } = await letterApi.patchLetters(editData);
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
     }
   }
 );
@@ -106,7 +120,6 @@ const letterSlice = createSlice({
         state.isLoading = false;
         state.isError = false;
         state.isSuccess = true;
-        // state.letterValue = action.payload;
       })
       .addCase(__setletterCard.rejected, (state, action) => {
         const errorStatus = action.payload.response.status;
@@ -128,10 +141,30 @@ const letterSlice = createSlice({
         state.isLoading = false;
         state.isError = false;
         state.isSuccess = true;
-        state.lettersDB = action.payload;
+        state.letterValue = action.payload;
       })
       .addCase(__getletterCards.rejected, (state, action) => {
         console.log(action.payload);
+        const errorStatus = action.payload.response.status;
+        const errorMessage = action.payload.response.data.message;
+        state.isLoading = false;
+        state.isError = true;
+
+        state.error = action.payload;
+        state.setletterErrorStatus = errorStatus;
+        state.setletterErrorMessage = errorMessage;
+      });
+    builder
+      .addCase(__patchLetterCard.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(__patchLetterCard.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+        state.letterValue = action.payload;
+      })
+      .addCase(__patchLetterCard.rejected, (state, action) => {
         const errorStatus = action.payload.response.status;
         const errorMessage = action.payload.response.data.message;
         state.isLoading = false;

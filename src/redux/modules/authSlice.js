@@ -2,16 +2,20 @@
 
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { loginApi } from "api/loginApi";
+import { ProfileApi } from "api/profileApi";
 import { userApi } from "api/userApi";
+import defaultImage from "assets/images/user-defult-avatar.png";
 
 const initialState = {
   userData: {},
   userInfo: {
     id: "",
     nickname: "",
-    avatar: "",
+    avatar: defaultImage,
     success: false,
   },
+  selectFile: defaultImage,
+  thumnailImg: defaultImage,
   error: {},
   isSuccess: false,
   isLoading: false,
@@ -45,10 +49,34 @@ export const __setUserLogin = createAsyncThunk(
   }
 );
 
+export const __patchProfile = createAsyncThunk(
+  "auth/patchProfile",
+  async (formData, thunkAPI) => {
+    try {
+      const response = await ProfileApi.patchProfile(formData);
+      return response;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
 const authSlice = createSlice({
   name: "users",
   initialState,
-  reducers: {},
+  reducers: {
+    setUserInfo: (state, action) => {
+      const newData = action.payload;
+      state.userInfo = newData;
+    },
+    setSelectFile: (state, action) => {
+      console.log(state);
+      state.selectFile = action.payload;
+    },
+    setThumnailImg: (state, action) => {
+      state.thumnailImg = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(__setUserLogin.pending, (state) => {
@@ -62,14 +90,20 @@ const authSlice = createSlice({
       })
       .addCase(__setUserLogin.rejected, (state, action) => {
         console.log(action.payload);
-        const errorStatus = action.payload.response.status;
-        const errorMessage = action.payload.response.data.message;
-        state.isLoading = false;
-        state.isError = true;
+        if (action.payload && action.payload.response) {
+          const errorStatus = action.payload.response.status;
+          const errorMessage = action.payload.response.data.message;
+          state.isLoading = false;
+          state.isError = true;
 
-        state.error = action.payload;
-        state.errorStatus = errorStatus;
-        state.errorMessage = errorMessage;
+          state.error = action.payload;
+          state.errorStatus = errorStatus;
+          state.errorMessage = errorMessage;
+        } else {
+          state.isLoading = false;
+          state.isError = true;
+          state.error = action.payload;
+        }
       });
     //userInfo
     builder
@@ -93,10 +127,36 @@ const authSlice = createSlice({
         state.errorStatus = errorStatus;
         state.errorMessage = errorMessage;
       });
+    // profile image
+    builder
+      .addCase(__patchProfile.pending, (state, action) => {
+        state.isLoading = true;
+      })
+      .addCase(__patchProfile.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+      })
+      .addCase(__patchProfile.rejected, (state, action) => {
+        if (action.payload && action.payload.response) {
+          const errorStatus = action.payload.response.status;
+          const errorMessage = action.payload.response.data.message;
+          state.isLoading = false;
+          state.isError = true;
+
+          state.error = action.payload;
+          state.errorStatus = errorStatus;
+          state.errorMessage = errorMessage;
+        } else {
+          state.isLoading = false;
+          state.isError = true;
+          state.error = action.payload;
+        }
+      });
   },
 });
 
-export const {} = authSlice.actions;
+export const { setUserInfo, setSelectFile, setThumnailImg } = authSlice.actions;
 
 export default authSlice.reducer;
 

@@ -28,9 +28,11 @@ const Layout = () => {
     alert("로그아웃 되셨습니다!");
     navigate("/", { replace: true });
   };
+  console.log(userInfo);
   useEffect(() => {
     settingLocal("user", userInfo);
   }, []);
+
   return (
     <div>
       <Header>

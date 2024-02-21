@@ -1,14 +1,14 @@
 import axios from "axios";
-import { getLocal } from "component/common/localStorage";
+import { gettingLocal } from "component/common/localStorage";
 
 // userAPI
-const token = getLocal("token");
+const token = gettingLocal("token");
 const userURL = process.env.REACT_APP_API_URL;
 
 const instanceProfile = axios.create({
   baseURL: userURL,
   headers: {
-    "Content-Type": "formdata/*",
+    "Content-Type": "multipart/form-data",
     Authorization: `Bearer ${token}`,
   },
 });
@@ -23,7 +23,7 @@ export const ProfileApi = {
 instanceProfile.interceptors.request.use(
   function (config) {
     console.log("요청 완료", config);
-    const token = getLocal("token");
+    const token = gettingLocal("token");
     config.headers.Authorization = `Bearer ${token}`;
     return config;
   },

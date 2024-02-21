@@ -59,7 +59,7 @@
 
 **프로젝트 명** : MSG ( 내 연예인을 위한 Messages)
 
-**개발 기간** : 2024. 01.30 ~ 2024.02.03 (5일)
+**개발 기간** : 2024. 02.18 ~ 2024.02.21 (4일)
 
 **프로젝트 소개** : 내가 응원하고 싶은 연예인에게 전하는 메세지를 남기는 사이트
 
@@ -174,50 +174,30 @@ $ yarn start
 
 
 
-### 권장 요구 사항
+### 권장 요구 사항 및 필수 구현 사항
 - [x]  (1) 프로젝트 셋업
-    - CRA boilerplate 로 프로젝트 생성
-    - pages/ , components/ , shared/ , assets/ 폴더 작성 및 필요 컴포넌트 사전 작성
-    - styled-components, react-router-dom 설치
-    - title 변경 (index.html)
-    - jsconfig.json (src 폴더 기준 절대경로 설정)
-    - 제출된 깃헙에는 props-drilling, context, redux 라는 이름의 각각의 브랜치명이 있어야 합니다.
-    - props-drilling 브랜치에서는 context나 redux 없이 useState만으로 상태관리해서 코드를 작성합니다.
-    - props-drilling 으로 코드를 모두 작성 및 커밋을 완료했으면 context 브랜치로 생성 및 이동합니다.
-    - context 브랜치에서는 props-drilling으로 작업한 코드에서 react context API를 사용하여 전역상태를 이용한 코드로 리팩터링합니다.
-    - context 브랜치에서 리팩터링 및 커밋을 완료했으면 redux 브랜치 생성 및 이동합니다.
-    - redux 브랜치에서는 context api로 전역상태를 관리한 코드를 모두 redux 라이브러리를 이용한 코드로 리팩터링합니다.
-
+- [x]  (2) “redux-thunk” 브랜치 생성 및 이동
+- [x]  (3) Router 셋업
+- [x]  (4) Redux를 Redux-Toolkit 으로 리팩터링
+- [x]]  (5) 로그인 화면 UI 작업
+- [x]  (6) 로그인 화면 API 연결
+- [x]  (7) Layout 컴포넌트 작성
+- [x]  (8) 홈 화면 UI 수정
+- [x]  (9) json-server 셋업
+- [x]  (10) 홈 화면 API 연결
+- [x]  (11) 상세 화면 UI 및 API 연결
+- [ ]  (12) 프로필 화면 UI
+- [ ]  (13) 프로필 화면 API 연결
+- [ ]  (14) 13단계까지 모두 완료하셨다면 선택구현사항들에 도전해 보시면 되겠습니다!
   <br />
-
-## 필수 구현 사항
-
-- [x] 팬레터 CRUD 구현 (작성, 조회, 수정, 삭제)
-- [x] 아티스트별 게시물 조회 기능 구현 (Home - Read)
-- [x] 원하는 아티스트에게 팬레터 등록 구현 (Home - Create)
-- [x] 팬레터 상세 화면 구현 (Detail - Read)
-- [x] 상세화면에서 팬레터 내용 수정 구현 (Detail - Update)
-- [x] 상세화면에서 팬레터 삭제 구현 (Detail - Delete)
-
-> **필수 요구 사항!  아래 내용을 꼭 지켜면서 구현해 주세요!**
-> 
-- [x]  styled-components 를 이용하여 스타일링
-    - 인라인 스타일링이나 일반 css 파일을 이용한 스타일링 방식 지양 (이번 과제 한정)
-    - 모든 태그를 styled-components 화 할 필요는 없으나 스타일링이 들어가는 경우는 styled-components 화 할 것
-- [x]  전역 스타일에 reset.css 를 적용해주고 box-sizing이 border-box가 되도록 설정
-- [x]  styled-components에 props를 넘김으로 인한 조건부 스타일링 적용
-    - 아티스트 선택탭에 적용해 보세요
-- [x]  팬레터 등록 시 id는 uuid 라이브러리를 이용
-    
-    https://www.npmjs.com/package//uuid
-
+  
 ## 선택 구현 사항 
 - [ ] 모달 구현
     - window.alert 이나 window.conform 대신 직접 구현한 모달을 적용해 봅시다.
 - [x] 만능 버튼 구현(공통 컴포넌트 버튼)
     - 하나의 버튼 컴포넌트를 홈화면과 상세화면 모두에서 적용할 수 있도록 해봅시다.
     - props 로 버튼 크기나 버튼 텍스트 등을 받아봅시다.
-- [ ] 새로고침해도 UI 유지
+- [x] 새로고침해도 UI 유지
     - 로컬스토리지를 이용해 봅시다.
 - [ ] 검색 기능 구현
     - query string을 적용해 봅시다. (ex. http://localhost:3000?search=에스파)
@@ -225,44 +205,9 @@ $ yarn start
 
 <br />
 
-### 브랜치 구조
-- [x] Props Drilling → Context API → Redux 순으로 각각 별도의 브랜치
-
-
 <br />
 
 ### 2. 파일 구조
-
-
----
-
-#### 브랜치 이름 : props-drilling(정식명칭: prop-drilling)
-<div>
-  <p><img src="https://github.com/r03181231/msgs-for-my-idol/assets/152264010/aa3742b3-d294-4490-9a59-6b4a5f66ac54" width="150px" align="left"/><p>
-  <p><img src="https://github.com/r03181231/msgs-for-my-idol/assets/152264010/7ead0f2d-0891-4410-b782-a7b9d614426b" width="150px" /><p>
-  <p><img src="https://github.com/r03181231/msgs-for-my-idol/assets/152264010/c6181b5d-d833-4e17-9899-5f2e78b65a68" width="150px" align="left" /><p>
-  <p><img src="https://github.com/r03181231/msgs-for-my-idol/assets/152264010/e397c87c-806b-4ed9-b053-5f7b58a4775e" width="150px" align="left"/><p>
-  <p><img src="https://github.com/r03181231/msgs-for-my-idol/assets/152264010/5e8edc28-b407-43cd-adc3-d2dfcd3eb160" width="150px"  align="left"/><p>
-  <p><img src="https://github.com/r03181231/msgs-for-my-idol/assets/152264010/e071e841-be16-4cfe-aa15-12fe8fe6ca63" width="150px"  /><p>
- 
-</div>
-
-<br />
-
----
-
-#### 브랜치 이름 : context
-<div>
-  <p><img src="https://github.com/r03181231/msgs-for-my-idol/assets/152264010/ff083e68-b160-45e1-83de-07b6ead2a608" width="150px" align="left"/><p>
-  <p><img src="https://github.com/r03181231/msgs-for-my-idol/assets/152264010/032cc3c2-d6ff-4e68-909c-6cf5b3958165" width="150px"/><p>
-  <p><img src="https://github.com/r03181231/msgs-for-my-idol/assets/152264010/94265e5d-d30a-45d1-b12f-43dd77ffa4ee" width="150px" align="left"/><p>
-  <p><img src="https://github.com/r03181231/msgs-for-my-idol/assets/152264010/d70bb958-0ab3-4a66-8ce9-0ef8f2920017" width="150px" align="left"/><p>
-  <p><img src="https://github.com/r03181231/msgs-for-my-idol/assets/152264010/656696eb-6f99-4f38-8ce2-4052eb8dfdf6" width="150px" align="left"/><p>
-  <p><img src="https://github.com/r03181231/msgs-for-my-idol/assets/152264010/aee11e3a-ac0e-45f2-88b2-1f7c89366285" width="150px" /><p>
- 
-</div>
-
-<br />
 
 ---
 
